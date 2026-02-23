@@ -1319,9 +1319,14 @@ const EcsAllocator = struct {
 };
 
 fn flecs_abort() callconv(.c) noreturn {
-    std.debug.dumpCurrentStackTrace(@returnAddress());
+    std.debug.dumpCurrentStackTrace(.{
+        .first_address = @returnAddress(),
+        // TODO: Not sure about that
+        // .allow_unsafe_unwind = false,
+        // .context = null,
+    });
     @breakpoint();
-    std.posix.exit(1);
+    std.process.exit(1);
 }
 
 //--------------------------------------------------------------------------------------------------
